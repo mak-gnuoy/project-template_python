@@ -2,12 +2,8 @@ import logging
 
 from mak.gnuoy.store import JsonFileStore
 
-if __name__ == '__main__':
-    logging.getLogger().info("python project example")
- 
+if __name__ == "__main__":
     store = JsonFileStore("/app/output/hello.json")
-    store.set(**{'hello': 'hello, world from store'})
-    hello_dict = store.get('hello')
-    logging.getLogger().info(f"{hello_dict['hello']}")
-
-    
+    store.set(**{"me": "hello, world! how are you doing?"})
+    hello_dict = store.get("me")
+    logging.getLogger().info(f"{hello_dict['me']}")

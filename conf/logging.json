@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "handlers": {
+        "stream_handler": {
+            "class": "logging.StreamHandler",
+            "level": "NOTSET",
+            "formatter": "default_formatter"
+        },
+        "file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "NOTSET",
+            "formatter": "default_formatter",
+            "filename": "/app/log/app.log",
+            "mode": "a"
+        }
+    },
+    "formatters": {
+        "default_formatter": {
+            "format": "%(asctime)s %(module)s %(levelname)s %(message)s",
+            "datefmt": ""
+        }
+    },
+    "loggers": {
+        "root": {
+            "level": "INFO",
+            "handlers": [
+                "stream_handler",
+                "file_handler"
+            ],
+            "propagate": false
+        }
+    }
+}

@@ -8,33 +8,33 @@
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 		"dockerfile": "../Dockerfile"
 	},
-
 	"mounts": [
 		"source=${localWorkspaceFolder}/output,target=/app/output,type=bind,consistency=cached",
 		"source=${localWorkspaceFolder}/log,target=/app/log,type=bind,consistency=cached",
 		"source=/etc/timezone,target=/etc/timezone,type=bind,readonly",
 		"source=/etc/localtime,target=/etc/localtime,type=bind,readonly"
 	],
-	"runArgs": ["--env-file","${localWorkspaceFolder}/.env"],
-	
+	// "runArgs": ["--env-file","${localWorkspaceFolder}/.env"],
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Uncomment the next line to run commands after the container is created.
 	// "postCreateCommand": "cat /etc/os-release",
-
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-python.python"
-			]
+				"ms-azuretools.vscode-docker",
+				"ms-python.python",
+				"ms-python.black-formatter"
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"python.formatting.provider": "black"
+			}
 		}
 	}
-
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "devcontainer"
 }

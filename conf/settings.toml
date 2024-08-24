@@ -1,0 +1,5 @@
+[log]
+config.filepath = "/app/conf/logging.json"
+
+[output]
+root_path = "/app/output"

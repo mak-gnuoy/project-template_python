@@ -1,2 +1,2 @@
 # project-tempate_python
-python project template
+vscode project template for python development

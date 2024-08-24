@@ -5,53 +5,56 @@ from urllib.parse import urlparse, unquote
 
 from mak.gnuoy.framework import Store
 
+
 class FileStore(Store):
-    def __init__(self, file_path: str):
-        parsed = urlparse(file_path)
+    def __init__(self, path: str):
+        parsed = urlparse(path)
         if parsed.scheme.lower() == "file" or parsed.scheme.lower() == "":
-            self._file_path = file_path
+            self._path = path
         else:
-            raise Exception("file_path is not matched with FileStore") 
-    
+            raise Exception("path is not matched with FileStore")
+
     @classmethod
     def get_instance(cls, url: str):
         parsed_url = urlparse(url)
         if parsed_url.scheme.lower() == "file" or parsed_url.scheme.lower() == "":
             if Path(parsed_url.path).suffix.lower() == ".json":
                 from mak.gnuoy.store import JsonFileStore
+
                 return JsonFileStore(url)
             else:
-                raise Exception("Unsupported store type") 
+                raise Exception("Unsupported store type")
         else:
-           raise Exception("Unsupported store type") 
-        
+            raise Exception("Unsupported store type")
+
+
 class JsonFileStore(FileStore):
-    def __init__(self, file_path: str):        
-        parsed = urlparse(file_path)
+    def __init__(self, path: str):
+        parsed = urlparse(path)
         if Path(parsed.path).suffix.lower() == ".json":
             path = os.path.abspath(os.path.join(parsed.netloc, unquote(parsed.path)))
             super().__init__(path)
         else:
-            raise Exception("file_path is not matched with JsonFileStore") 
-        
+            raise Exception("file_path is not matched with JsonFileStore")
+
     def set(self, **key_values) -> dict:
         try:
-            with open(self._file_path, 'r') as f:
+            with open(self._path, "r") as f:
                 file_data = json.load(f)
         except FileNotFoundError as e:
-            os.makedirs(os.path.dirname(self._file_path), exist_ok=True)
+            os.makedirs(os.path.dirname(self._path), exist_ok=True)
             file_data = dict()
 
         file_data.update(key_values)
 
-        with open(self._file_path, 'w') as f:
-                json.dump(file_data, f)
-        
+        with open(self._path, "w") as f:
+            json.dump(file_data, f)
+
         return file_data
-    
+
     def get(self, *keys) -> dict:
         try:
-            with open(self._file_path, 'r') as f:
+            with open(self._path, "r") as f:
                 file_data = json.load(f)
         except FileNotFoundError as e:
             file_data = dict()
