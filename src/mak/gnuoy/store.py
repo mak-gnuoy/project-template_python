@@ -8,6 +8,8 @@ from mak.gnuoy.framework import Store
 
 class FileStore(Store):
     def __init__(self, path: str):
+        super().__init__(path)
+
         parsed = urlparse(path)
         if parsed.scheme.lower() == "file" or parsed.scheme.lower() == "":
             self._path = path
@@ -30,6 +32,8 @@ class FileStore(Store):
 
 class JsonFileStore(FileStore):
     def __init__(self, path: str):
+        super().__init__(path)
+
         parsed = urlparse(path)
         if Path(parsed.path).suffix.lower() == ".json":
             path = os.path.abspath(os.path.join(parsed.netloc, unquote(parsed.path)))
@@ -49,22 +53,26 @@ class JsonFileStore(FileStore):
 
         with open(self._path, "w") as f:
             json.dump(file_data, f)
+            self._logger.debug(f"{key_values} written to the {self._path}")
 
         return file_data
 
     def get(self, *keys) -> dict:
-        try:
-            with open(self._path, "r") as f:
-                file_data = json.load(f)
-        except FileNotFoundError as e:
-            file_data = dict()
-
-        if len(keys) <= 0:
-            return file_data
+        with open(self._path, "r") as f:
+            file_data = json.load(f)
 
         selected_data = dict()
         for key_in_file_data in file_data.keys():
             for key in keys:
                 if key == key_in_file_data:
                     selected_data[key_in_file_data] = file_data[key_in_file_data]
+        self._logger.debug(f"{selected_data} read from the {self._path}")
+
         return selected_data
+
+    def get_value(self, key: str):
+        with open(self._path, "r") as f:
+            file_data = json.load(f)
+        self._logger.debug(f"{key}: {file_data[key]} read from the {self._path}")
+
+        return file_data[key]
