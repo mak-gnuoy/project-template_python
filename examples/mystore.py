@@ -1,4 +1,3 @@
-from mak.gnuoy.framework import App
 from mak.gnuoy.store import JsonFileStore
 
 if __name__ == "__main__":

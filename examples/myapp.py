@@ -1,4 +1,3 @@
-import json
 from mak.gnuoy.framework import App
 
 

@@ -16,30 +16,22 @@ class FileStore(Store):
         else:
             raise Exception("path is not matched with FileStore")
 
-    @classmethod
-    def get_instance(cls, url: str):
-        parsed_url = urlparse(url)
-        if parsed_url.scheme.lower() == "file" or parsed_url.scheme.lower() == "":
-            if Path(parsed_url.path).suffix.lower() == ".json":
-                from mak.gnuoy.store import JsonFileStore
-
-                return JsonFileStore(url)
-            else:
-                raise Exception("Unsupported store type")
-        else:
-            raise Exception("Unsupported store type")
-
 
 class JsonFileStore(FileStore):
     def __init__(self, path: str):
         super().__init__(path)
 
-        parsed = urlparse(path)
-        if Path(parsed.path).suffix.lower() == ".json":
-            path = os.path.abspath(os.path.join(parsed.netloc, unquote(parsed.path)))
-            super().__init__(path)
+        parsed_url = urlparse(path)
+        if parsed_url.scheme.lower() == "file" or parsed_url.scheme.lower() == "":
+            if Path(parsed_url.path).suffix.lower() == ".json":
+                path = os.path.abspath(
+                    os.path.join(parsed_url.netloc, unquote(parsed_url.path))
+                )
+                super().__init__(path)
+            else:
+                raise Exception("path is not matched with JsonFileStore")
         else:
-            raise Exception("file_path is not matched with JsonFileStore")
+            raise Exception("Unsupported store type")
 
     def set(self, **key_values) -> dict:
         try:
