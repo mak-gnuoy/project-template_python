@@ -1,8 +1,10 @@
+from abc import ABC
 import json
 import logging
 import logging.config
+from typing import Any, Dict
+
 import tomllib
-from abc import ABC, abstractmethod
 
 with open("/app/conf/settings.toml", "rb") as f:
     settings = tomllib.load(f)
@@ -15,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class Config:
     @classmethod
-    def load(cls, path: str) -> dict:
+    def load(cls, path: str) -> Dict[str, Any]:
         with open(path, "rb") as f:
             return tomllib.load(f)
 
@@ -34,17 +36,3 @@ class App(Base):
             f"settings: {json.dumps(
                 self.settings, sort_keys=True, indent=4)}"
         )
-
-
-class Store(Base):
-    def __init__(self, url: str):
-        super().__init__()
-        self._url = url
-
-    @abstractmethod
-    def set(self, **key_values):
-        pass
-
-    @abstractmethod
-    def get(self, *keys):
-        pass

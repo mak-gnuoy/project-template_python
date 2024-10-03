@@ -1,9 +1,24 @@
+from abc import abstractmethod
 import json
 import os
 from pathlib import Path
 from urllib.parse import urlparse, unquote
 
-from mak.gnuoy.framework import Store
+from mak.gnuoy.framework import Base
+
+
+class Store(Base):
+    def __init__(self, url: str):
+        super().__init__()
+        self._url = url
+
+    @abstractmethod
+    def set(self, **key_values):
+        pass
+
+    @abstractmethod
+    def get(self, *keys):
+        pass
 
 
 class FileStore(Store):
