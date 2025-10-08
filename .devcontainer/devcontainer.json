@@ -12,14 +12,20 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-azuretools.vscode-docker",
+				"streetsidesoftware.code-spell-checker",
 				"ms-python.python",
+				"ms-python.pylint",
+				"ms-python.isort",
 				"ms-python.black-formatter"
 			],
 			"settings": {
+				"editor.defaultFormatter": "ms-python.black-formatter",
 				"editor.formatOnSave": true,
-				"python.formatting.provider": "black"
-			}
+				"editor.codeActionsOnSave": {
+					"source.organizeImports": "explicit"
+				}
+			},
+			"isort.args":["--profile", "black"],
 		}
 	}
 
